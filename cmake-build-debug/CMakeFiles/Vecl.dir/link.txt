@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/Vecl.dir/main.cpp.o  -o Vecl /usr/lib/x86_64-linux-gnu/libglfw.so /usr/lib/x86_64-linux-gnu/libvulkan.so 
