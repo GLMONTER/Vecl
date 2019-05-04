@@ -23,7 +23,9 @@ const std::vector<const char*> validationLayers =
 
 GLFWwindow* window;
 VkInstance instance;
+VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 VkDebugUtilsMessengerEXT debugMessenger;
+
 
 void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator)
 {
@@ -184,6 +186,43 @@ void createInstance()
     }
     else
         std::clog<<"Vulkan instance created!"<<std::endl;
+}
+
+bool isDeviceSuitable(VkPhysicalDevice device)
+{
+    //needed for next chapter
+    /*
+    VkPhysicalDeviceProperties deviceProperties;
+    vkGetPhysicalDeviceProperties(device, &deviceProperties);
+     */
+    return true;
+}
+
+void pickPhysicalDevice()
+{
+    uint32_t deviceCount = 0;
+    vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
+    if(deviceCount == 0)
+        throw std::runtime_error("No GPU found with Vulkan support");
+
+    std::vector<VkPhysicalDevice> devices(deviceCount);
+    vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
+
+    for(const auto& device : devices)
+    {
+        if(isDeviceSuitable(device))
+        {
+            physicalDevice = device;
+            break;
+        }
+    }
+
+    if(physicalDevice == VK_NULL_HANDLE)
+        throw std::runtime_error("failed to find a GPU with all of the required features need for this program");
+
+
+
+
 }
 void initVulkan()
 {
