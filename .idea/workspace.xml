@@ -12,10 +12,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7b1dfdae-33b5-4591-a288-9a3d27d882a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Vecl.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Vecl.dir/CXX.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Vecl.dir/main.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Vecl" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Vecl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -43,11 +39,23 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="503">
-              <caret line="222" column="127" selection-start-line="222" selection-start-column="127" selection-end-line="222" selection-end-column="127" />
+            <state>
+              <caret column="37" selection-start-column="37" selection-end-column="37" />
               <folding>
-                <element signature="e#100#123#0" expanded="true" />
-                <element signature="e#216#234#0" expanded="true" />
+                <element signature="e#149#169#0" expanded="true" />
+                <element signature="e#239#258#0" expanded="true" />
+                <element signature="e#659#1012#0" />
+                <element signature="e#1350#1917#0" />
+                <element signature="e#1919#3255#0" />
+                <element signature="e#3257#4174#0" />
+                <element signature="e#4176#5157#0" />
+                <element signature="e#5159#5402#0" />
+                <element signature="e#5404#7122#0" />
+                <element signature="e#7358#7581#0" />
+                <element signature="e#7583#8255#0" />
+                <element signature="e#9040#9140#1" />
+                <element signature="e#9438#9519#1" />
+                <element signature="e#9527#9577#1" />
               </folding>
             </state>
           </provider>
@@ -58,6 +66,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>findQ</find>
+      <find>&amp;</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -72,7 +81,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="width" value="960" />
+    <option name="width" value="878" />
     <option name="height" value="868" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -122,12 +131,12 @@
       <workItem from="1552886645344" duration="5094000" />
       <workItem from="1556942591782" duration="2354000" />
       <workItem from="1556983089405" duration="203000" />
-      <workItem from="1557016520013" duration="1737000" />
+      <workItem from="1557016520013" duration="9442000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9388000" />
+    <option name="totallyTimeSpent" value="17093000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1600" height="868" extended-state="6" />
@@ -157,13 +166,6 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file:///usr/include/c++/8/bits/stl_vector.h" />
-    <entry file="file:///usr/include/vulkan/vulkan_core.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="7554" column="2" selection-start-line="7554" selection-start-column="2" selection-end-line="7554" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/c++/7/optional">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="156">
@@ -178,13 +180,49 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///usr/include/vulkan/vulkan_core.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="7572" column="25" selection-start-line="7572" selection-start-column="25" selection-end-line="7572" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/GLFW/glfw3.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="807">
+          <caret line="4218" column="17" selection-start-line="4218" selection-start-column="17" selection-end-line="4218" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/c++/7/set">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="461">
+          <caret line="66" column="6" lean-forward="true" selection-start-line="66" selection-start-column="6" selection-end-line="66" selection-end-column="6" />
+          <folding>
+            <element signature="e#2309#2335#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="503">
-          <caret line="222" column="127" selection-start-line="222" selection-start-column="127" selection-end-line="222" selection-end-column="127" />
+        <state>
+          <caret column="37" selection-start-column="37" selection-end-column="37" />
           <folding>
-            <element signature="e#100#123#0" expanded="true" />
-            <element signature="e#216#234#0" expanded="true" />
+            <element signature="e#149#169#0" expanded="true" />
+            <element signature="e#239#258#0" expanded="true" />
+            <element signature="e#659#1012#0" />
+            <element signature="e#1350#1917#0" />
+            <element signature="e#1919#3255#0" />
+            <element signature="e#3257#4174#0" />
+            <element signature="e#4176#5157#0" />
+            <element signature="e#5159#5402#0" />
+            <element signature="e#5404#7122#0" />
+            <element signature="e#7358#7581#0" />
+            <element signature="e#7583#8255#0" />
+            <element signature="e#9040#9140#1" />
+            <element signature="e#9438#9519#1" />
+            <element signature="e#9527#9577#1" />
           </folding>
         </state>
       </provider>

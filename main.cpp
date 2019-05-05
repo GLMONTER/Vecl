@@ -1,22 +1,36 @@
+//bottom of tut, check code to verify
+
 
 //this includes <vulkan/vulkan.h> from within the glfw3.h header file.
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
+//duh..
 #include <iostream>
+
+//for std::runtime_error
 #include <stdexcept>
+
 #include <cstdlib>
+
 #include <vector>
 //for strcmp
 #include <cstring>
+
+//for the queue families
 #include <optional>
 
+#include<set>
+
+//window dimensions
 const int WIDTH = 800;
 const int HEIGHT = 600;
 
+//the validation layers we would like to use
 const std::vector<const char*> validationLayers =
         {"VK_LAYER_LUNARG_standard_validation"};
 
+//check if we are in debug mode or not to use validation layers
 #ifdef NDEBUG
     const bool enableValidationLayers = false;
 #else
@@ -25,8 +39,12 @@ const std::vector<const char*> validationLayers =
 
 GLFWwindow* window;
 VkInstance instance;
+VkDevice device = VK_NULL_HANDLE;
 VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+VkQueue graphicsQueue;
+VkQueue presentQueue;
 VkDebugUtilsMessengerEXT debugMessenger;
+VkSurfaceKHR surface;
 
 
 void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator)
@@ -190,15 +208,15 @@ void createInstance()
         std::clog<<"Vulkan instance created!"<<std::endl;
 }
 
-//this struct is simply used
+//an index of all of the required queue families for this program.
 struct QueueFamilyIndices
 {
     //research what this data structure even is...
     std::optional<uint32_t> graphicsFamily;
-
+    std::optional<uint32_t> presentFamily;
     bool isComplete()
     {
-        return graphicsFamily.has_value();
+        return graphicsFamily.has_value() && presentFamily.has_value();
     }
 };
 //this function checks if the GPU has all of the required queue families we need
@@ -222,8 +240,17 @@ QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device)
         //The variable i in this case is to simply put a value into the graphicsFamily variable to indicate that the graphics queue family is supported,
         //we have to put something in because we are using std::optional to store the result so we just need a different value.
         //check this syntax, very interesting.
+
+        //try and get an understanding of what the i var really does here.
         if(queueFamily.queueCount > 0 && queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
             indices.graphicsFamily = i;
+
+        VkBool32 presentSupport = false;
+        vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &presentSupport);
+
+        if(queueFamily.queueCount > 0 && presentSupport)
+            indices.presentFamily = i;
+
 
         //if we have a value in the graphicsFamily variable indicating we support a graphics family, then break.
         if(indices.isComplete())
@@ -231,7 +258,6 @@ QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device)
 
         i++;
     }
-
     return indices;
 }
 bool isDeviceSuitable(VkPhysicalDevice device)
@@ -261,16 +287,63 @@ void pickPhysicalDevice()
 
     if(physicalDevice == VK_NULL_HANDLE)
         throw std::runtime_error("failed to find a GPU with all of the required features need for this program");
+}
 
+void createLogicalDevice()
+{
+    QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
 
+    std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
+    std::set<uint32_t> uniqueQueueFamilies = {indices.graphicsFamily.value(), indices.presentFamily.value()};
 
+    float queuePriority = 1.0f;
+
+    for(uint32_t queueFamily : uniqueQueueFamilies)
+    {
+        VkDeviceQueueCreateInfo queueCreateInfo = {};
+        queueCreateInfo.queueFamilyIndex = queueFamily;
+        queueCreateInfo.queueCount = 1;
+        queueCreateInfo.pQueuePriorities = &queuePriority;
+        queueCreateInfos.push_back(queueCreateInfo);
+    }
+
+    VkPhysicalDeviceFeatures deviceFeatures = {};
+
+    VkDeviceCreateInfo createInfo = {};
+    createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    createInfo.pQueueCreateInfos = queueCreateInfos.data();
+    createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
+    createInfo.pEnabledFeatures = &deviceFeatures;
+
+    createInfo.enabledExtensionCount = 0;
+
+    if(enableValidationLayers) {
+        createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+        createInfo.ppEnabledLayerNames = validationLayers.data();
+    }
+    else
+        createInfo.enabledLayerCount = 0;
+
+    if(vkCreateDevice(physicalDevice, &createInfo, nullptr, &device) != VK_SUCCESS)
+        throw std::runtime_error("Logical Device Creation Failed.");
+
+    vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &graphicsQueue);
+
+}
+
+void createSurface()
+{
+    if(glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS)
+        throw std::runtime_error("GLFW failed to create the window surface.");
 
 }
 void initVulkan()
 {
     createInstance();
     setupDebugMessenger();
+    createSurface();
     pickPhysicalDevice();
+    createLogicalDevice();
 }
 
 //the main program loop
@@ -285,10 +358,12 @@ void mainLoop()
 //cleanup when the program exits, (delete vulkan objects and destroy windows)
 void cleanup()
 {
-    if (enableValidationLayers) {
+    vkDestroyDevice(device, nullptr);
+    if (enableValidationLayers)
         DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
-    }
 
+
+    vkDestroySurfaceKHR(instance, surface, nullptr);
     vkDestroyInstance(instance, nullptr);
 
     glfwTerminate();
