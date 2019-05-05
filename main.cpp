@@ -9,6 +9,8 @@
 #include <vector>
 //for strcmp
 #include <cstring>
+#include <optional>
+
 const int WIDTH = 800;
 const int HEIGHT = 600;
 
@@ -188,14 +190,54 @@ void createInstance()
         std::clog<<"Vulkan instance created!"<<std::endl;
 }
 
+//this struct is simply used
+struct QueueFamilyIndices
+{
+    //research what this data structure even is...
+    std::optional<uint32_t> graphicsFamily;
+
+    bool isComplete()
+    {
+        return graphicsFamily.has_value();
+    }
+};
+//this function checks if the GPU has all of the required queue families we need
+QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device)
+{
+    QueueFamilyIndices indices;
+
+    uint32_t queueFamilyCount = 0;
+
+    vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+
+    std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+
+    vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+
+    int i = 0;
+
+    //
+    for(const auto& queueFamily : queueFamilies)
+    {
+        //The variable i in this case is to simply put a value into the graphicsFamily variable to indicate that the graphics queue family is supported,
+        //we have to put something in because we are using std::optional to store the result so we just need a different value.
+        //check this syntax, very interesting.
+        if(queueFamily.queueCount > 0 && queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+            indices.graphicsFamily = i;
+
+        //if we have a value in the graphicsFamily variable indicating we support a graphics family, then break.
+        if(indices.isComplete())
+            break;
+
+        i++;
+    }
+
+    return indices;
+}
 bool isDeviceSuitable(VkPhysicalDevice device)
 {
-    //needed for next chapter
-    /*
-    VkPhysicalDeviceProperties deviceProperties;
-    vkGetPhysicalDeviceProperties(device, &deviceProperties);
-     */
-    return true;
+    QueueFamilyIndices indices = findQueueFamilies(device);
+    return indices.isComplete();
 }
 
 void pickPhysicalDevice()
@@ -228,6 +270,7 @@ void initVulkan()
 {
     createInstance();
     setupDebugMessenger();
+    pickPhysicalDevice();
 }
 
 //the main program loop
