@@ -30,6 +30,8 @@ const int HEIGHT = 600;
 const std::vector<const char*> validationLayers =
         {"VK_LAYER_LUNARG_standard_validation"};
 
+std::vector<VkImageView> swapChainImageViews;
+
 //check if we are in debug mode or not to use validation layers
 #ifdef NDEBUG
     const bool enableValidationLayers = false;
@@ -276,7 +278,7 @@ void pickPhysicalDevice()
     std::vector<VkPhysicalDevice> devices(deviceCount);
     vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
 
-    for(const auto& device : devices)
+    for(const VkPhysicalDevice &device : devices)
     {
         if(isDeviceSuitable(device))
         {
@@ -301,6 +303,7 @@ void createLogicalDevice()
     for(uint32_t queueFamily : uniqueQueueFamilies)
     {
         VkDeviceQueueCreateInfo queueCreateInfo = {};
+        queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
         queueCreateInfo.queueFamilyIndex = queueFamily;
         queueCreateInfo.queueCount = 1;
         queueCreateInfo.pQueuePriorities = &queuePriority;
@@ -329,6 +332,8 @@ void createLogicalDevice()
 
     vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &graphicsQueue);
 
+    vkGetDeviceQueue(device, indices.presentFamily.value(), 0, &presentQueue);
+
 }
 
 void createSurface()
@@ -337,6 +342,12 @@ void createSurface()
         throw std::runtime_error("GLFW failed to create the window surface.");
 
 }
+
+void createImageViews()
+{
+
+}
+
 void initVulkan()
 {
     createInstance();
@@ -344,6 +355,7 @@ void initVulkan()
     createSurface();
     pickPhysicalDevice();
     createLogicalDevice();
+
 }
 
 //the main program loop
